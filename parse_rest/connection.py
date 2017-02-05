@@ -113,7 +113,10 @@ class ParseBase(object):
             data = None
         else:
             if cls.__name__ == 'File':
-                data = data
+                if data == "{}":
+                    data = data.encode('utf-8')
+                else:
+                    data = data
             else:
                 data = data.encode('utf-8')
 
@@ -144,7 +147,7 @@ class ParseBase(object):
                 }.get(e.code, core.ParseError)
             raise exc(e.read())
 
-        return json.loads(response.read().decode('utf-8'))
+        return json.loads(response.read().decode('utf-8') or "{}")
 
     @classmethod
     def GET(cls, uri, **kw):
